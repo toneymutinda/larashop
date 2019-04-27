@@ -144,7 +144,7 @@ class ShopDetail extends React.Component{
     }
 
     renderProducts() {
-        if (this.state.shop.products > 0) {
+        if (this.state.shop.products != null) {
             const products = this.state.shop.products;
             console.log(products);
             return products.map(product => {

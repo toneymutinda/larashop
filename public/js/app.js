@@ -69695,7 +69695,7 @@ function (_React$Component) {
   }, {
     key: "renderProducts",
     value: function renderProducts() {
-      if (this.state.shop.products > 0) {
+      if (this.state.shop.products != null) {
         var products = this.state.shop.products;
         console.log(products);
         return products.map(function (product) {
