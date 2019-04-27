@@ -15,8 +15,8 @@ class CreateShopsTable extends Migration
     {
         Schema::create('shops', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // $table->unsignedBigInteger('user_id');
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('store_name');
             $table->string('store_url');
             $table->string('currency');
@@ -31,8 +31,8 @@ class CreateShopsTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
+        //Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('shops');
-        Schema::enableForeignKeyConstraints();
+        //Schema::enableForeignKeyConstraints();
     }
 }

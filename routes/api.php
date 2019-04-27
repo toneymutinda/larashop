@@ -17,5 +17,7 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 Route::resource('shop', 'ShopController');
+Route::post('shop/{id}/product', 'ShopController@addProduct');
+Route::get('shop/{id}/products', 'ShopController@getProducts');
+Route::post('shop/{id}/feed', 'ShopController@createFeed');
 Route::resource('feeds', 'FeedController');
-Route::resource('products', 'ProductController');

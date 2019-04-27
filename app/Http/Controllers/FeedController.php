@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Feed;
+use Illuminate\Support\Facades\Response;
+use App\Product;
 
 class FeedController extends Controller
 {
@@ -13,7 +16,11 @@ class FeedController extends Controller
      */
     public function index()
     {
-        //
+        $feeds = Feed::with(['shop', 'shop.products'])->get();
+
+        return response()->json([
+            'feeds' => $feeds
+        ]);
     }
 
     /**
@@ -45,7 +52,44 @@ class FeedController extends Controller
      */
     public function show($id)
     {
-        //
+        $feed = Feed::find($id);
+
+        if(!$feed){
+            return response()->json([
+                'errors' => 'Feed not found'
+            ]);
+        }
+
+        // download csv here
+        $shop = $feed->shop()->first();
+        $products = $shop->products()->get();
+
+        $headers = [
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',   
+            'Content-type' => 'text/csv',   
+            'Content-Disposition' => 'attachment; filename=feed.csv', 
+            'Expires' => '0',   
+            'Pragma' => 'public'
+        ];
+
+        $mycolumns = [];
+
+        $product_columns = Product::all(['name', 'title', 'brand', 'sales_price', 'description', 'quantity', 'created_at'])->toArray();
+
+        array_unshift($product_columns, array_keys($product_columns[0]));
+        $columns = array_values($product_columns[0]);
+        array_push($mycolumns, $columns);
+
+        $callback = function() use ($mycolumns) 
+        {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $mycolumns[0]);
+            fclose($file);            
+        };
+
+        return response()->streamDownload($callback, 200, $headers);
+    
+        //return Response::stream($callback, 200, $headers);
     }
 
     /**
