@@ -88,8 +88,6 @@ class FeedController extends Controller
         };
 
         return response()->streamDownload($callback, 200, $headers);
-    
-        //return Response::stream($callback, 200, $headers);
     }
 
     /**
